@@ -810,8 +810,9 @@ h3 { font-size: 14px; }
   }
 
   .preset-btn {
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 40px;
   }
 
   .status-bar {
@@ -836,7 +837,9 @@ h3 { font-size: 14px; }
   }
 
   .ctrl-btn {
-    padding: 10px 12px;
+    padding: 12px;
+    min-height: 44px;
+    min-width: 44px;
   }
 
   .ctrl-btn .label {
@@ -858,6 +861,7 @@ h3 { font-size: 14px; }
 
   .countdown-number {
     font-size: 80px;
+    padding: 8px 40px;
   }
 
   .modal {
