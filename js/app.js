@@ -174,6 +174,22 @@ App.prototype._bindEvents = function() {
         b.classList.toggle('active', parseInt(b.getAttribute('data-duration')) === dur);
       });
       self._saveSettings();
+
+      // Realtime adjustment
+      if (self.state === 'playing' || self.state === 'paused') {
+        self.currentRoutine.forEach(function(item) {
+          if (item.id !== 'breathing' && item.id !== 'blink_reminder') {
+            item.duration = dur;
+          } else if (item.id === 'blink_reminder') {
+            item.duration = Math.max(10, Math.round(dur / 2));
+          }
+        });
+        
+        var currentItem = self.currentRoutine[self.currentPatternIndex];
+        if (currentItem) {
+          self.engine.duration = currentItem.duration;
+        }
+      }
     });
   });
 
@@ -414,11 +430,11 @@ App.prototype._startCurrentPattern = function() {
 
   // Setup engine callbacks
   var self = this;
-  var totalSec = duration / this.settings.speed;
+  var totalSec = duration;
 
   this.engine.onProgress(function(progress, remainingSec) {
     self.ui.updateProgress(progress);
-    self.ui.updateTimer(remainingSec, totalSec);
+    self.ui.updateTimer(remainingSec, self.engine.duration);
   });
 
   this.engine.onPhaseLabel(function(label) {

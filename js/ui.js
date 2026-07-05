@@ -251,7 +251,11 @@ UIController.prototype.showIdleState = function() {
 
 UIController.prototype.hideIdleOverlay = function() {
   if (this.els.idleOverlay) this.els.idleOverlay.classList.add('hidden');
-  if (this.els.ball) this.els.ball.classList.remove('hidden');
+  if (this.els.ball) {
+    this.els.ball.classList.remove('hidden');
+    this.els.ball.style.left = '50%';
+    this.els.ball.style.top = '50%';
+  }
 };
 
 UIController.prototype.showDistanceGuide = function() {

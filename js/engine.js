@@ -87,12 +87,12 @@ AnimationEngine.prototype.start = function(pattern, duration, speed) {
     if (self.state !== 'playing') return;
 
     var effectiveSpeed = self.reducedMotion ? self.speed * 0.5 : self.speed;
-    var totalMs = (self.duration / effectiveSpeed) * 1000;
+    var totalMs = self.duration * 1000;
     self.elapsed = (timestamp - self.startTime);
     self.progress = Math.min(self.elapsed / totalMs, 1);
 
     // Update posisi bola
-    self._updateBallPosition(self.progress);
+    self._updateBallPosition(self.progress * effectiveSpeed);
 
     // Callback progress
     if (self._onProgress) {
@@ -179,7 +179,7 @@ AnimationEngine.prototype.resume = function() {
 
   var self = this;
   var effectiveSpeed = this.reducedMotion ? this.speed * 0.5 : this.speed;
-  var totalMs = (this.duration / effectiveSpeed) * 1000;
+  var totalMs = this.duration * 1000;
 
   // Sesuaikan startTime agar progress berlanjut dari pausedAt
   this.startTime = performance.now() - this.pausedAt;
@@ -187,10 +187,12 @@ AnimationEngine.prototype.resume = function() {
   function loop(timestamp) {
     if (self.state !== 'playing') return;
 
+    var currentEffectiveSpeed = self.reducedMotion ? self.speed * 0.5 : self.speed;
+
     self.elapsed = (timestamp - self.startTime);
     self.progress = Math.min(self.elapsed / totalMs, 1);
 
-    self._updateBallPosition(self.progress);
+    self._updateBallPosition(self.progress * currentEffectiveSpeed);
 
     if (self._onProgress) {
       var remainingSec = Math.max(0, (totalMs - self.elapsed) / 1000);

@@ -37,22 +37,22 @@ const PATTERNS = {
     name: 'Diagonal Sweep',
     description: 'Melatih gerakan oblique mata',
     duration: 30,
-    // Bola bergerak diagonal (bergantian arah)
     path: function(t) {
-      // Setengah pertama: kiri-atas → kanan-bawah
-      // Setengah kedua: kanan-atas → kiri-bawah
-      const cycle = t * 2;
+      // Setengah pertama: diagonal utama (kiri-atas <-> kanan-bawah)
+      // Setengah kedua: diagonal sekunder (kanan-atas <-> kiri-bawah)
+      // Keduanya bermula dan berakhir di titik tengah (0.5, 0.5) untuk menghindari lompatan
+      const cycle = (t * 2) % 2;
       if (cycle < 1) {
-        const progress = Math.sin(cycle * Math.PI);
+        const progress = Math.sin(cycle * 2 * Math.PI);
         return {
-          x: 0.5 + 0.35 * (progress * 2 - 1),
-          y: 0.5 + 0.35 * (progress * 2 - 1)
+          x: 0.5 + 0.35 * progress,
+          y: 0.5 + 0.35 * progress
         };
       } else {
-        const progress = Math.sin((cycle - 1) * Math.PI);
+        const progress = Math.sin((cycle - 1) * 2 * Math.PI);
         return {
-          x: 0.5 + 0.35 * (progress * 2 - 1),
-          y: 0.5 - 0.35 * (progress * 2 - 1)
+          x: 0.5 + 0.35 * progress,
+          y: 0.5 - 0.35 * progress
         };
       }
     }
@@ -114,7 +114,7 @@ const PATTERNS = {
       const bottom = 1 - margin - 0.1;
 
       // Bagi t menjadi 4 segmen
-      const segment = t * 4;
+      const segment = (t * 4) % 4;
 
       if (segment < 1) {
         // Atas: kiri → kanan
