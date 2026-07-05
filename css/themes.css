@@ -1,0 +1,182 @@
+/* ============================================
+   EyeRelax — Theme Tokens (CSS Custom Properties)
+   Filosofi: Swiss Design + Apple HIG
+   ============================================ */
+
+/* === Light Theme (Default) === */
+:root {
+  /* Background */
+  --bg-primary: #F4F5F7;
+  --bg-secondary: #FCFCFD;
+  --bg-overlay: rgba(0, 0, 0, 0.04);
+  --bg-modal: rgba(244, 245, 247, 0.92);
+  --bg-modal-backdrop: rgba(0, 0, 0, 0.3);
+
+  /* Teks */
+  --text-primary: #2C3E50;
+  --text-secondary: #5C6B7A;
+  --text-tertiary: #8C9BAA;
+
+  /* Aksen (Default: Ocean) */
+  --accent: #4A90E2;
+  --accent-hover: #3A78C4;
+  --accent-glow: rgba(74, 144, 226, 0.3);
+  --accent-subtle: rgba(74, 144, 226, 0.08);
+
+  /* Border & Divider */
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --divider: rgba(0, 0, 0, 0.06);
+
+  /* Kontrol */
+  --control-bg: rgba(0, 0, 0, 0.04);
+  --control-bg-hover: rgba(0, 0, 0, 0.08);
+  --control-bg-active: rgba(0, 0, 0, 0.12);
+
+  /* Progress */
+  --progress-bg: rgba(0, 0, 0, 0.06);
+  --progress-fill: var(--accent);
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Bola */
+  --ball-color: var(--accent);
+  --ball-glow: var(--accent-glow);
+  --ball-radius: 20px;
+
+  /* Transisi */
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Ukuran */
+  --header-height: 56px;
+  --status-height: 48px;
+  --control-height: 56px;
+  --bar-total: calc(var(--header-height) + var(--status-height) + var(--control-height));
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Z-index */
+  --z-ball: 10;
+  --z-overlay: 100;
+  --z-header: 200;
+  --z-modal: 500;
+  --z-countdown: 600;
+}
+
+/* === Dark Theme === */
+[data-theme="dark"] {
+  --bg-primary: #1E1E2E;
+  --bg-secondary: #181825;
+  --bg-overlay: rgba(255, 255, 255, 0.04);
+  --bg-modal: rgba(30, 30, 46, 0.95);
+  --bg-modal-backdrop: rgba(0, 0, 0, 0.6);
+
+  --text-primary: #CDD6F4;
+  --text-secondary: #A6ADC8;
+  --text-tertiary: #7F849C;
+
+  --accent: #89B4FA;
+  --accent-hover: #749CF0;
+  --accent-glow: rgba(137, 180, 250, 0.4);
+  --accent-subtle: rgba(137, 180, 250, 0.1);
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --divider: rgba(255, 255, 255, 0.06);
+
+  --control-bg: rgba(255, 255, 255, 0.06);
+  --control-bg-hover: rgba(255, 255, 255, 0.1);
+  --control-bg-active: rgba(255, 255, 255, 0.14);
+
+  --progress-bg: rgba(255, 255, 255, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* === Aksen Warna Alternatif (Zen Palette) === */
+[data-accent="ocean"] {
+  --accent: #4A90E2;
+  --accent-hover: #3A78C4;
+  --accent-glow: rgba(74, 144, 226, 0.3);
+  --accent-subtle: rgba(74, 144, 226, 0.08);
+}
+[data-theme="dark"][data-accent="ocean"] {
+  --accent: #89B4FA;
+  --accent-hover: #749CF0;
+  --accent-glow: rgba(137, 180, 250, 0.4);
+  --accent-subtle: rgba(137, 180, 250, 0.1);
+}
+
+[data-accent="coral"] {
+  --accent: #DE6B74;
+  --accent-hover: #C55861;
+  --accent-glow: rgba(222, 107, 116, 0.3);
+  --accent-subtle: rgba(222, 107, 116, 0.08);
+}
+[data-theme="dark"][data-accent="coral"] {
+  --accent: #F38BA8;
+  --accent-hover: #E37493;
+  --accent-glow: rgba(243, 139, 168, 0.4);
+  --accent-subtle: rgba(243, 139, 168, 0.1);
+}
+
+[data-accent="sage"] {
+  --accent: #7BA385;
+  --accent-hover: #678A6F;
+  --accent-glow: rgba(123, 163, 133, 0.3);
+  --accent-subtle: rgba(123, 163, 133, 0.08);
+}
+[data-theme="dark"][data-accent="sage"] {
+  --accent: #A6E3A1;
+  --accent-hover: #8FCE8A;
+  --accent-glow: rgba(166, 227, 161, 0.4);
+  --accent-subtle: rgba(166, 227, 161, 0.1);
+}
+
+[data-accent="lavender"] {
+  --accent: #9B82C4;
+  --accent-hover: #836AA8;
+  --accent-glow: rgba(155, 130, 196, 0.3);
+  --accent-subtle: rgba(155, 130, 196, 0.08);
+}
+[data-theme="dark"][data-accent="lavender"] {
+  --accent: #CBA6F7;
+  --accent-hover: #B48EE0;
+  --accent-glow: rgba(203, 166, 247, 0.4);
+  --accent-subtle: rgba(203, 166, 247, 0.1);
+}
+
+[data-accent="sunset"] {
+  --accent: #DDA77B;
+  --accent-hover: #C49165;
+  --accent-glow: rgba(221, 167, 123, 0.3);
+  --accent-subtle: rgba(221, 167, 123, 0.08);
+}
+[data-theme="dark"][data-accent="sunset"] {
+  --accent: #F9E2AF;
+  --accent-hover: #E4CC9A;
+  --accent-glow: rgba(249, 226, 175, 0.4);
+  --accent-subtle: rgba(249, 226, 175, 0.1);
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-base: 0ms;
+    --transition-fast: 0ms;
+    --transition-slow: 0ms;
+  }
+}

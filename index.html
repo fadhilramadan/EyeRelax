@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light" data-accent="ocean">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EyeRelax — Senam & relaksasi mata dengan panduan visual. Kurangi digital eyestrain dengan latihan mata yang mudah diikuti.">
+  <meta name="theme-color" content="#4A90E2">
+  <title>EyeRelax — Senam & Relaksasi Mata</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Font: Inter dari Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animation.css">
+</head>
+<body>
+
+  <div class="app" id="app">
+
+    <!-- ===== Header Bar ===== -->
+    <header class="header" id="header" role="banner">
+      <div class="header-left">
+        <div class="logo-icon" aria-hidden="true"></div>
+        <h1 class="logo-text">EyeRelax</h1>
+      </div>
+      <nav class="header-right" role="navigation" aria-label="Preset routines">
+        <button class="preset-btn" id="btn-quick" role="button" aria-pressed="false" data-tooltip="~2 menit">
+          Quick
+        </button>
+        <button class="preset-btn" id="btn-full" role="button" aria-pressed="false" data-tooltip="~5 menit">
+          Full
+        </button>
+        <button class="preset-btn" id="btn-deep" role="button" aria-pressed="false" data-tooltip="~8 menit">
+          Deep
+        </button>
+      </nav>
+    </header>
+
+    <!-- ===== Canvas Area (Area Animasi) ===== -->
+    <main class="canvas-area" id="canvas-area" role="main">
+
+      <!-- Bola Bergerak -->
+      <div class="ball hidden" id="ball" aria-hidden="true"></div>
+
+      <!-- Idle Overlay -->
+      <div class="idle-overlay" id="idle-overlay">
+        <div class="idle-title">Istirahatkan Matamu</div>
+        <div class="idle-subtitle">
+          Pilih preset di atas, lalu tekan Mulai. Ikuti bola dengan kedua matamu untuk merelakskan otot mata.
+        </div>
+        <button class="idle-start-btn" id="idle-start-btn" aria-label="Mulai sesi">
+          Mulai Sesi
+        </button>
+        <div class="idle-hint">
+          <span class="kbd">Space</span> untuk mulai &nbsp;·&nbsp;
+          <span class="kbd">S</span> settings &nbsp;·&nbsp;
+          <span class="kbd">T</span> tema
+        </div>
+      </div>
+
+      <!-- Distance Guide Overlay -->
+      <div class="distance-guide-overlay hidden" id="distance-guide-overlay">
+        <div class="distance-guide-content">
+          <div class="distance-icon" aria-hidden="true">📏</div>
+          <div class="distance-title">Jaga Jarak Aman Mata</div>
+          <div class="distance-subtitle">
+            Untuk kenyamanan & efektivitas latihan, posisikan duduk tegak dan jaga jarak sekitar <strong>satu lengan (~50–70 cm)</strong> dari monitor Anda.
+          </div>
+          <button class="distance-ready-btn" id="distance-ready-btn" aria-label="Saya sudah siap, mulai sesi">
+            Saya Siap, Mulai Sesi
+          </button>
+          <div class="distance-hint">
+            Tekan <span class="kbd">Space</span> atau klik tombol untuk melanjutkan
+          </div>
+        </div>
+      </div>
+
+      <!-- Countdown Overlay -->
+      <div class="countdown-overlay" id="countdown-overlay" aria-live="assertive">
+        <div class="countdown-number" id="countdown-number"></div>
+      </div>
+
+      <!-- Pattern Transition Overlay -->
+      <div class="pattern-transition-overlay" id="transition-overlay">
+        <div class="pattern-transition-card">
+          <div class="pattern-transition-name" id="transition-name"></div>
+          <div class="pattern-transition-desc" id="transition-desc"></div>
+        </div>
+      </div>
+
+      <!-- Blink Reminder Overlay -->
+      <div class="blink-reminder-overlay" id="blink-overlay">
+        <div class="blink-icon" aria-hidden="true">👁️</div>
+        <div class="blink-text">Berkediplah Perlahan</div>
+        <div class="blink-subtext">Tutup & buka mata dengan lembut beberapa kali</div>
+      </div>
+
+      <!-- Breathing Label -->
+      <div class="pattern-transition-overlay" id="breathing-label" style="pointer-events: none;">
+        <div class="pattern-transition-name" style="font-size: 24px; opacity: 0.7;"></div>
+      </div>
+
+      <!-- Complete Screen -->
+      <div class="complete-overlay" id="complete-overlay">
+        <div class="complete-emoji">🎉</div>
+        <div class="complete-title">Selamat!</div>
+        <div class="complete-subtitle">Sesi senam matamu telah selesai. Matamu sekarang lebih rileks dan segar.</div>
+        <div class="complete-stats">
+          <div class="complete-stat">
+            <div class="complete-stat-value" id="complete-time">00:00</div>
+            <div class="complete-stat-label">Durasi</div>
+          </div>
+          <div class="complete-stat">
+            <div class="complete-stat-value" id="complete-patterns">0</div>
+            <div class="complete-stat-label">Gerakan</div>
+          </div>
+        </div>
+        <button class="complete-btn" id="complete-btn" aria-label="Kembali ke beranda">Selesai</button>
+      </div>
+
+      <!-- Confetti Container -->
+      <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+    </main>
+
+    <!-- ===== Status Bar ===== -->
+    <div class="status-bar" id="status-bar" role="status">
+      <div class="status-left">
+        <div class="pattern-indicator" aria-hidden="true"></div>
+        <span class="pattern-name" id="pattern-name">Siap</span>
+      </div>
+      <div class="status-center">
+        <span class="timer-display" id="timer-display">00:00 / 00:00</span>
+        <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <div class="status-right">
+        <span class="routine-progress-text" id="routine-progress">0 / 0</span>
+      </div>
+    </div>
+
+    <!-- ===== Control Bar ===== -->
+    <div class="control-bar" id="control-bar" role="toolbar" aria-label="Kontrol animasi">
+      <button class="ctrl-btn" id="btn-prev" aria-label="Pattern sebelumnya" data-tooltip="← Sebelumnya">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></span>
+        <span class="label">Prev</span>
+      </button>
+
+      <button class="ctrl-btn primary" id="btn-start" aria-label="Mulai animasi" data-tooltip="Space">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <span class="label">Start</span>
+      </button>
+
+      <button class="ctrl-btn primary hidden" id="btn-pause" aria-label="Pause animasi" data-tooltip="Space">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></span>
+        <span class="label">Pause</span>
+      </button>
+
+      <button class="ctrl-btn" id="btn-next" aria-label="Pattern selanjutnya" data-tooltip="→ Selanjutnya">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-12.5 12l8.5-6-8.5-6z"/></svg></span>
+        <span class="label">Next</span>
+      </button>
+
+      <div class="ctrl-spacer"></div>
+
+      <button class="ctrl-btn" id="btn-settings" aria-label="Buka pengaturan" data-tooltip="S">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+        <span class="label">Settings</span>
+      </button>
+
+      <button class="ctrl-btn" id="btn-fullscreen" aria-label="Fullscreen" data-tooltip="F">
+        <span class="icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span>
+        <span class="label">Full</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ===== Settings Modal ===== -->
+  <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true"></div>
+  <div class="modal" id="settings-modal" role="dialog" aria-label="Pengaturan" aria-modal="true">
+    <div class="modal-header">
+      <h2 class="modal-title">Pengaturan</h2>
+      <button class="modal-close" id="modal-close" aria-label="Tutup pengaturan">
+        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Speed -->
+      <div class="setting-row">
+        <div class="setting-label-row">
+          <span class="setting-label">Kecepatan</span>
+          <span class="setting-value" id="speed-value">1.0×</span>
+        </div>
+        <input type="range" class="slider" id="speed-slider"
+               min="0.1" max="4.0" step="0.1" value="1.0"
+               aria-label="Kecepatan gerakan">
+      </div>
+
+      <!-- Ball Size -->
+      <div class="setting-row">
+        <div class="setting-label-row">
+          <span class="setting-label">Ukuran Bola</span>
+          <span class="setting-value" id="ball-size-value">20px</span>
+        </div>
+        <input type="range" class="slider" id="ball-size-slider"
+               min="10" max="40" step="2" value="20"
+               aria-label="Ukuran bola">
+      </div>
+
+      <!-- Duration -->
+      <div class="setting-row">
+        <span class="setting-label">Durasi per Gerakan</span>
+        <div class="duration-options">
+          <button class="duration-btn" data-duration="15" aria-label="15 detik">15s</button>
+          <button class="duration-btn active" data-duration="30" aria-label="30 detik">30s</button>
+          <button class="duration-btn" data-duration="60" aria-label="60 detik">60s</button>
+        </div>
+      </div>
+
+      <div class="setting-divider"></div>
+
+      <!-- Accent Color -->
+      <div class="setting-row">
+        <span class="setting-label">Warna Aksen</span>
+        <div class="color-options">
+          <button class="color-swatch active" data-color="ocean" aria-label="Ocean" tabindex="0"></button>
+          <button class="color-swatch" data-color="coral" aria-label="Coral" tabindex="0"></button>
+          <button class="color-swatch" data-color="sage" aria-label="Sage" tabindex="0"></button>
+          <button class="color-swatch" data-color="lavender" aria-label="Lavender" tabindex="0"></button>
+          <button class="color-swatch" data-color="sunset" aria-label="Sunset" tabindex="0"></button>
+        </div>
+      </div>
+
+      <div class="setting-divider"></div>
+
+      <!-- Audio Cue -->
+      <div class="setting-row">
+        <div class="toggle-row">
+          <span class="setting-label">Audio Transisi</span>
+          <button class="toggle-switch" id="audio-toggle" role="switch" aria-pressed="false" aria-label="Audio cue"></button>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="setting-row">
+        <span class="setting-label">Tema</span>
+        <div class="theme-options">
+          <button class="theme-btn" id="theme-light" aria-label="Tema terang">Light</button>
+          <button class="theme-btn active" id="theme-auto" aria-label="Tema otomatis">Auto</button>
+          <button class="theme-btn" id="theme-dark" aria-label="Tema gelap">Dark</button>
+        </div>
+      </div>
+
+      <div class="setting-divider"></div>
+
+      <!-- Keyboard Shortcuts Reference -->
+      <div class="setting-row">
+        <span class="setting-label" style="margin-bottom: 4px;">Shortcut Keyboard</span>
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12px; color: var(--text-secondary);">
+          <span class="kbd">Space</span> <span>Pause / Resume</span>
+          <span class="kbd">←</span> <span>Pattern sebelumnya</span>
+          <span class="kbd">→</span> <span>Pattern selanjutnya</span>
+          <span class="kbd">F</span> <span>Fullscreen</span>
+          <span class="kbd">T</span> <span>Toggle tema</span>
+          <span class="kbd">S</span> <span>Settings</span>
+          <span class="kbd">Esc</span> <span>Tutup / Exit</span>
+          <span class="kbd">1-9</span> <span>Pilih pattern</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARIA Live Region -->
+  <div class="sr-only" id="aria-live" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts (load order sesuai dependency graph) -->
+  <script src="js/patterns.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
